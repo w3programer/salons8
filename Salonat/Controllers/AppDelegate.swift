@@ -1,20 +1,19 @@
-//
-//  AppDelegate.swift
-//  Salonat
-//
-//  Created by salman on 10/19/18.
-//  Copyright © 2018 salman. All rights reserved.
-//
 
 import UIKit
 import Firebase
+import IQKeyboardManagerSwift
+import Kingfisher
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
     var window: UIWindow?
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+                if Helper.islogedin() == true {
+                    let tab = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Home")
+                    window?.rootViewController = tab
+        }
+        IQKeyboardManager.shared.enable = true
+       /// sleep(3)
+
         // Override point for customization after application launch.
 //        FirebaseApp.configure()
 //        InstanceID.instanceID().instanceID  { (result, error) in
@@ -27,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            }
 //        }
 
-        sleep(1)
+       // sleep(1)
         return true
     }
 

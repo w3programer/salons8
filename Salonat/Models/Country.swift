@@ -1,18 +1,10 @@
-/* 
-Copyright (c) 2018 Swift Models Generated from JSON powered by http://www.json4swift.com
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 
 import Foundation
- 
+ import SwiftyJSON
 /* For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
 
-public class Country {
+public class Country:NSObject {
 	public var id_country : String?
 	public var ar_name : String?
 	public var en_name : String?
@@ -21,71 +13,21 @@ public class Country {
 	public var phone_code : String?
 	public var google_lat : String?
 	public var google_long : String?
-	public var sub_city : Array<String>?
 
-/**
-    Returns an array of models based on given dictionary.
-    
-    Sample usage:
-    let json4Swift_Base_list = Json4Swift_Base.modelsFromDictionaryArray(someDictionaryArrayFromJSON)
-
-    - parameter array:  NSArray from JSON dictionary.
-
-    - returns: Array of Json4Swift_Base Instances.
-*/
-    public class func modelsFromDictionaryArray(array:NSArray) -> [Country]
-    {
-        var models:[Country] = []
-        for item in array
-        {
-            models.append(Country(dictionary: item as! NSDictionary)!)
+    init?(dic:[String:JSON]) {
+        guard let id_country = dic["id_country"]?.string ,let ar_name = dic["ar_name"]?.string ,let en_name = dic["en_name"]?.string else {
+            return nil
         }
-        return models
+        self.id_country = id_country
+        self.ar_name = ar_name
+        self.en_name = en_name
+        self.ar_nationality = (dic["ar_nationality"]?.string)!
+        self.en_nationality = (dic["en_nationality"]?.string)!
+        self.phone_code = (dic["phone_code"]?.string)!
+        self.google_lat = (dic["google_lat"]?.string)!
+        self.google_long = (dic["google_long"]?.string)!
+
+      
+        
     }
-
-/**
-    Constructs the object based on the given dictionary.
-    
-    Sample usage:
-    let json4Swift_Base = Json4Swift_Base(someDictionaryFromJSON)
-
-    - parameter dictionary:  NSDictionary from JSON.
-
-    - returns: Json4Swift_Base Instance.
-*/
-	required public init?(dictionary: NSDictionary) {
-
-		id_country = dictionary["id_country"] as? String
-		ar_name = dictionary["ar_name"] as? String
-		en_name = dictionary["en_name"] as? String
-		ar_nationality = dictionary["ar_nationality"] as? String
-		en_nationality = dictionary["en_nationality"] as? String
-		phone_code = dictionary["phone_code"] as? String
-		google_lat = dictionary["google_lat"] as? String
-		google_long = dictionary["google_long"] as? String
-		
-	}
-
-		
-/**
-    Returns the dictionary representation for the current instance.
-    
-    - returns: NSDictionary.
-*/
-	public func dictionaryRepresentation() -> NSDictionary {
-
-		let dictionary = NSMutableDictionary()
-
-		dictionary.setValue(self.id_country, forKey: "id_country")
-		dictionary.setValue(self.ar_name, forKey: "ar_name")
-		dictionary.setValue(self.en_name, forKey: "en_name")
-		dictionary.setValue(self.ar_nationality, forKey: "ar_nationality")
-		dictionary.setValue(self.en_nationality, forKey: "en_nationality")
-		dictionary.setValue(self.phone_code, forKey: "phone_code")
-		dictionary.setValue(self.google_lat, forKey: "google_lat")
-		dictionary.setValue(self.google_long, forKey: "google_long")
-
-		return dictionary
-	}
-
 }

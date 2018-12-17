@@ -7,18 +7,33 @@
 //
 
 import UIKit
-
+import SelectionList
 class ServiceCell: UITableViewCell {
-
+    @IBOutlet weak var selectionList: SelectionList!
+    @IBOutlet weak var serviceName: UILabel!
+    var itemarr = [String]()
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        //selectionList.items = ["One", "Two", "Three", "Four", "Five"]
+      //  selectionList.selectedIndexes = [0, 1, 4]
+        selectionList.allowsMultipleSelection = true
+        selectionList.items = itemarr
+        selectionList.addTarget(self, action: #selector(selectionChanged), for: .valueChanged)
+        selectionList.setupCell = { (cell: UITableViewCell, _: Int) in
+            cell.textLabel?.textColor = .gray
+        }
+    
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
+
+    @objc func selectionChanged (){
+        print(selectionList.selectedIndexes)
+        
+    }
+
 
 }

@@ -10,6 +10,11 @@ import UIKit
 
 class notifactionTCELL: UITableViewCell {
 
+    @IBOutlet weak var statueNote: UILabel!
+    @IBOutlet weak var salonName: UILabel!
+    @IBOutlet weak var datenote: UILabel!
+    @IBOutlet weak var salonPhoto: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

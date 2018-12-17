@@ -7,11 +7,16 @@
 //
 
 import UIKit
-
+import Cosmos
 class voteCell: UITableViewCell {
 
+    @IBOutlet weak var opinion: UILabel!
+    @IBOutlet weak var customerName: UILabel!
+    @IBOutlet weak var voteStars: CosmosView!
     override func awakeFromNib() {
         super.awakeFromNib()
+        voteStars.settings.updateOnTouch = false
+
         // Initialization code
     }
 

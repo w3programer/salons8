@@ -7,40 +7,65 @@
 //
 
 import UIKit
-
+import Kingfisher
 class notifactionTVC: UITableViewController {
 
+    @IBOutlet var notTable: UITableView!
+    var notifacation = [notifactionModel]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.notTable.tableFooterView = UIView()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        refreshtable()
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return notifacation.count
     }
 
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
 
-        // Configure the cell...
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = notTable.dequeueReusableCell(withIdentifier: "notifactionCell" ,for: indexPath) as! notifactionTCELL
+        cell.selectionStyle = UITableViewCell.SelectionStyle.none
+
+        cell.selectionStyle = UITableViewCell.SelectionStyle.none
+        cell.datenote.text = notifacation[indexPath.row].approved_date
+        cell.salonName.text = notifacation[indexPath.row].title
+        let url = URL(string: notifacation[indexPath.row].main_photo!)
+        cell.salonPhoto.kf.setImage(with: url)
+        let approved = (notifacation[indexPath.row].approved! as NSString).integerValue
+        if approved == 1  {
+          cell.statueNote.text = "تم الموافقه على المعاد و يمكنك الدخول للدفع"
+        } else if approved == 2{
+          cell.statueNote.text = "تم رفض المعاد"
+        }else if approved == 4{
+          cell.statueNote.text = "تم الموافقه"
+        }else if approved == 5{
+         cell.statueNote.text = "تم الرفض"
+        }
+        
 
         return cell
+        
     }
-    */
+    func refreshtable()  {
+        Api.notifactions { (error:Error?, data:[notifactionModel]?) in
+            self.notifacation = data!
+            self.notTable.reloadData()
+        }
+        
+        
+    }
 
     /*
     // Override to support conditional editing of the table view.

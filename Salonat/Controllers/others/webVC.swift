@@ -1,30 +1,19 @@
-//
-//  webVC.swift
-//  Salonat
-//
-//  Created by Hesham on 12/9/18.
-//  Copyright © 2018 salman. All rights reserved.
-//
 
 import UIKit
-
-class webVC: UIViewController {
-
+import WebKit
+class webVC: BaseViewController {
+    var urlstr = ""
+   var titlestr = ""
+    @IBOutlet var WebView: WKWebView!
     override func viewDidLoad() {
+        self.addSlideMenuButton()
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        print(urlstr)
+        print(titlestr)
+      self.title = self.titlestr
+        let myURL = URL(string: self.urlstr)
+        let myRequest = URLRequest(url: myURL!)
+        WebView.load(myRequest)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

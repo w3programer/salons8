@@ -1,14 +1,13 @@
-//
-//  banccellVC.swift
-//  Salonat
-//
-//  Created by Hesham on 12/9/18.
-//  Copyright © 2018 salman. All rights reserved.
-//
 
 import UIKit
 
 class banccellVC: UITableViewCell {
+
+    
+    @IBOutlet weak var bankName: UILabel!
+    @IBOutlet weak var iban: UILabel!
+    
+    @IBOutlet weak var bankNumber: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()

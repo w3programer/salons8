@@ -26,7 +26,7 @@ extension Api {
                     completion(error , false)
                 case .success(let value):
                     let data = JSON(value)
-                    print(data)
+                   // print(data)
                     if (data["success_login"].int != 0) {
 //                        let param = [
 //                            "user_token_id":messageconfig.getDevicetoken(),
@@ -35,8 +35,13 @@ extension Api {
 //                            param, encoding: URLEncoding.default, headers: nil)
                         let user_id = Int(data["user_id"].string!)!
                         let user_full_name = data["user_full_name"].string
-                        let user_phone = data["user_phone"].string
-                        Helper.setUserData(user_id: user_id,user_full_name: user_full_name!,user_phone:user_phone!)
+                        let user_phone = data["user_phone"].string.getOrElse(defaultValue: "0539044145")
+                        let user_address = data["user_address"].string.getOrElse(defaultValue: "saudi")
+                        let country = data["ar_name"].string.getOrElse(defaultValue: "saudi")
+                        let city_title = data["ar_city_title"].string.getOrElse(defaultValue: "saudi")
+                        let email = data["user_email"].string.getOrElse(defaultValue: "heshamtatawy@gmail.com")
+                        
+                        Helper.setUserData(user_id: user_id,user_full_name: user_full_name!,user_phone:user_phone,user_address:user_address,country:country,city_title:city_title, email: email)
                         completion(nil ,true)
                     }
                     

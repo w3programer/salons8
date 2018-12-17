@@ -5,6 +5,7 @@ import Foundation
 /* For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
 
 public class Registration {
+    
 	public var user_id : String?
 	public var user_name : String?
 	public var is_login : String?

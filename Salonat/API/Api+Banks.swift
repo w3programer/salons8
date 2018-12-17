@@ -1,9 +1,39 @@
-//
-//  Api+Banks.swift
-//  Salonat
-//
-//  Created by Hesham on 12/9/18.
-//  Copyright © 2018 salman. All rights reserved.
-//
+import UIKit
+import Alamofire
+import  SwiftyJSON
 
-import Foundation
+extension Api {
+    
+    class func banksAccount(completion:@escaping(_ error :Error? ,_ data:[banksModel]?)->Void){
+        let BaseUrl = config.bank
+        
+        Alamofire.request(BaseUrl)
+            .validate(statusCode:200..<300)
+            .responseJSON { response in
+                switch response.result
+                {
+                case .failure( let error):
+                    print(error)
+                    completion(error , nil)
+                case .success(let value):
+                    let json = JSON(value)
+                  // print(json)
+                    guard let dataArr = json.array else{
+                        completion(nil , nil)
+                        return
+                    }
+                    var results = [banksModel]()
+                    for data in dataArr {
+                        
+                        if let data = data.dictionary ,let info = banksModel.init(dic: data) {
+                            results.append(info)
+                        }
+                    }
+                    completion(nil,results)
+                }
+                
+        }
+        
+    }
+    
+}

@@ -10,6 +10,9 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 class Api: NSObject {
+    class var isconnectedtotheinternet:Bool{
+        return NetworkReachabilityManager()!.isReachable
+    }
     class func registration(
         user_pass:String ,user_phone:String ,user_country:String,user_email:String,user_full_name:String,user_token_id:String,user_google_lat:String,user_google_long:String,user_city:String,user_address:String,completion:@escaping(_ error :Error? ,_ success :Bool)->Void){
         let BaseUrl = config.registration
@@ -39,8 +42,13 @@ class Api: NSObject {
                         let user_id = Int(data["user_id"].string!)!
                         let user_full_name = data["user_full_name"].string
                         let user_phone = data["user_phone"].string
-                        /////////
-                        Helper.setUserData(user_id: user_id,  user_full_name: user_full_name!,user_phone:user_phone!)
+                        let user_address = data["user_address"].string
+                        let country = data["ar_name"].string
+                        let city_title = data["ar_city_title"].string
+                        let email = data["user_email"].string
+
+                        Helper.setUserData(user_id: user_id,user_full_name: user_full_name!,user_phone:user_phone!,user_address:user_address!,country:country!,city_title:city_title!, email: email!)
+
                         completion(nil ,true)
                     }
                 }

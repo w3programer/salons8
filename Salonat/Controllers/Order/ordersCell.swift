@@ -10,6 +10,11 @@ import UIKit
 
 class ordersCell: UITableViewCell {
 
+    @IBOutlet weak var orderdate: UILabel!
+    
+    @IBOutlet weak var salonNmae: UILabel!
+    @IBOutlet weak var salonphoto: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

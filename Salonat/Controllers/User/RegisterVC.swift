@@ -1,24 +1,12 @@
-//
-//  RegisterVC.swift
-//  Salonat
-//
-//  Created by salman on 10/23/18.
-//  Copyright © 2018 salman. All rights reserved.
-//
-
 import UIKit
-import CoreLocation
-
-class RegisterVC: UIViewController,CLLocationManagerDelegate {
-
-    var imagepicker:UIImagePickerController!
-    
-    let genderArr = [NSLocalizedString("Mail", comment: ""),NSLocalizedString("Femail", comment: "")]
-    let Arr = [NSLocalizedString("arabic", comment: ""),NSLocalizedString("english", comment: "")]
-    var pickerview = UIPickerView()
-    var pickerview1 = UIPickerView()
-
-    
+class RegisterVC: UIViewController {
+    var countryCode:String?
+    var cityCode:String?
+    //    var locationManager:CLLocationManager!
+    var pickervieCountry = UIPickerView()
+    var pickerviewCity = UIPickerView()
+    var countries = [Country]()
+    var cities = [City]()
     @IBOutlet weak var TFName: UITextField!
     @IBOutlet weak var TFEmail: UITextField!
     @IBOutlet weak var TFCountry: UITextField!
@@ -26,95 +14,114 @@ class RegisterVC: UIViewController,CLLocationManagerDelegate {
     @IBOutlet weak var TFAddress: UITextField!
     @IBOutlet weak var TFPhone: UITextField!
     @IBOutlet weak var TFPassword: UITextField!
-    
-    let locationmanager = CLLocationManager()
-    var location:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-    var marketDestination:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        TFCountry.inputView = pickerview
-        TFCity.inputView = pickerview1
-
-        pickerview.dataSource = self
-        pickerview.delegate = self
-        pickerview1.dataSource = self
-        pickerview1.delegate = self
-
+        TFCountry.inputView = pickervieCountry
+        TFCity.inputView = pickerviewCity
+        pickervieCountry.dataSource = self
+        pickervieCountry.delegate = self
+        pickerviewCity.dataSource = self
+        pickerviewCity.delegate = self
+        getCountry()
         font_awsm()
-
-        // Do any additional setup after loading the view.
+        getCity()
     }
-    
-
-    
-    func font_awsm(){
-        TFName.setLeftViewFAIcon(icon: .FAUserO, leftViewMode: .always, textColor: UIColor(hexString: "#F1CCD3FF")!, backgroundColor: .clear, size: nil)
-        TFEmail.setLeftViewFAIcon(icon: .FAEnvelope, leftViewMode: .always, textColor: UIColor(hexString: "#F1CCD3FF")!, backgroundColor: .clear, size: nil)
-        TFCountry.setLeftViewFAIcon(icon: .FAMapPin, leftViewMode: .always, textColor: UIColor(hexString: "#F1CCD3FF")!, backgroundColor: .clear, size: nil)
-        TFCity.setLeftViewFAIcon(icon: .FAMapPin, leftViewMode: .always, textColor: UIColor(hexString: "#F1CCD3FF")!, backgroundColor: .clear, size: nil)
-        TFPhone.setLeftViewFAIcon(icon: .FAMapPin, leftViewMode: .always, textColor: UIColor(hexString: "#F1CCD3FF")!, backgroundColor: .clear, size: nil)
-        TFAddress.setLeftViewFAIcon(icon: .FAMapPin, leftViewMode: .always, textColor: UIColor(hexString: "#F1CCD3FF")!, backgroundColor: .clear, size: nil)
-        TFPassword.setLeftViewFAIcon(icon: .FALock, leftViewMode: .always, textColor: UIColor(hexString: "#F1CCD3FF")!, backgroundColor: .clear, size: nil)
-    }
-
-    
-    func locateWithLongitude(_ lon: Double, andLatitude lat: Double, andTitle title: String) {
-        DispatchQueue.main.async { () -> Void in
-            
-            let destination = CLLocation(latitude:lat , longitude:lon)
-            self.marketDestination.longitude = lon
-            self.marketDestination.latitude = lat
-            
-        
-            
+    func getCountry(){
+        Api.selectCountry { (error: Error?,info:[Country]?) in
+            self.countries = info!
         }
     }
-  
+    func getCity(){
+        Api.selectCity { (error: Error?,info:[City]?) in
+            self.cities = info!
+        }
+    }
     @IBAction func register(_ sender: UIButton) {
-        
         guard let username = TFName.text,!username.isEmpty else {return}
         guard let email = TFEmail.text,!email.isEmpty else{return}
-        guard let country = TFCountry.text,!country.isEmpty else{return}
-        guard let city = TFCity.text,!city.isEmpty else{return}
         guard let address = TFAddress.text,!address.isEmpty else{return}
         guard let phone = TFPhone.text,!phone.isEmpty else{return}
         guard let Password = TFPassword.text,!Password.isEmpty else{return}
-//
-//        Api.registration(user_pass: Password, user_phone: phone, user_country: <#T##String#>, user_email: <#T##String#>, user_full_name: <#T##String#>, user_token_id: <#T##String#>, user_google_lat: <#T##String#>, user_google_long: <#T##String#>, user_city: <#T##String#>, user_address: <#T##String#>, completion: <#T##(Error?, Bool) -> Void#>)
+        Api.registration(user_pass: Password, user_phone: phone.replacedArabicDigitsWithEnglish, user_country: self.countryCode!, user_email: email, user_full_name: username, user_token_id: "", user_google_lat: username, user_google_long: "12345", user_city: "123456", user_address: address) { (error:Error?, success :Bool) in
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            let vc = storyboard.instantiateViewController(withIdentifier: "HomeStoryBoard") as! HomeVC
+//            self.navigationController?.pushViewController(vc,animated: true)
 
+
+        }
     }
-    
 }
-
-
 extension RegisterVC : UIPickerViewDelegate, UIPickerViewDataSource{
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 2
-    }
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if pickerView.tag == 1 {
-            return genderArr[row]
+        if pickerView == pickervieCountry {
 
-        } else {
-            return Arr[row]
+        return countries.count
+        }else{
+            return cities.count
+
+        }
+    }
+    
+    
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if pickerView == pickervieCountry {
+            if self.lanuage() == false{
+                return countries[row].en_name
+                
+            }else{
+                return countries[row].ar_name
+            }
+        } else  {
+            if self.lanuage() == false{
+                return cities[row].en_city_title
+            } else{
+                return cities[row].ar_city_title
+            }
         }
         
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if pickerView.tag == 1 {
-            TFCountry.text = genderArr[row]
-            TFCountry.resignFirstResponder()
-        } else {
-            TFCity.text = Arr[row]
-            TFCity.resignFirstResponder()
-
+        if pickerView == pickervieCountry {
+            
+            if self.lanuage() == false{
+                TFCountry.text = countries[row].en_name
+                self.countryCode = countries[row].id_country
+                TFCountry.resignFirstResponder()
+            } else {
+                TFCountry.text = countries[row].ar_name
+                self.countryCode = countries[row].id_country
+                TFCountry.resignFirstResponder()
+            }
+        }
+         else {
+            if self.lanuage() == false{
+                TFCity.text = cities[row].en_city_title
+                self.cityCode = cities[row].id_city
+                TFCity.resignFirstResponder()
+            } else {
+                TFCity.text = cities[row].ar_city_title
+                self.cityCode = cities[row].id_city
+                TFCity.resignFirstResponder()
+            }
         }
         
     }
+    func lanuage() -> Bool {
+        let preferredLanguage = Locale.current.languageCode
+        if preferredLanguage == "en"{
+            return  true
+            
+        } else{
+            return false
+            
+        }
+        
+        
+    }
+    
 }

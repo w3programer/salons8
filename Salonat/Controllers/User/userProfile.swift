@@ -8,23 +8,33 @@
 
 import UIKit
 
-class profileVC: BaseViewController {
+class userProfile: BaseViewController {
+    @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet weak var WalleImage: UIImageView!
+    @IBOutlet weak var username: UILabel!
+    @IBOutlet weak var email: UITextField!
+    @IBOutlet weak var phone: UITextField!
+    @IBOutlet weak var password: UITextField!
+    @IBOutlet weak var adress: UITextField!
+    let def = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
-self.addSlideMenuButton()
-        // Do any additional setup after loading the view.
+       self.addSlideMenuButton()
+        self.title = (def.object(forKey: "user_full_name") as! String)
+        self.username.text = def.object(forKey: "user_full_name") as? String
+        self.email.text = def.object(forKey: "email") as? String
+        self.adress.text = def.object(forKey: "user_address") as? String
+        self.phone.text = def.object(forKey: "user_phone") as? String
     }
     
+    @IBAction func updateProfile(_ sender: UIBarButtonItem) {
+        let phone = self.phone.text!
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        Api.updateProfile(user_phone:phone.replacedArabicDigitsWithEnglish , email: email.text!, user_country: def.object(forKey: "country") as! String, user_city: def.object(forKey: "city_title") as! String, user_address: adress.text!, user_full_name: username.text!) { (error:Error?, result:Bool?) in
+            
+            self.showAlert(message: NSLocalizedString("success update", comment: "dd"))
+        }
     }
-    */
-
+    
 }

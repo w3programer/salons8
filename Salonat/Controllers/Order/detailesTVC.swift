@@ -10,6 +10,12 @@ import UIKit
 
 class detailesTVC: UITableViewCell {
 
+    @IBOutlet weak var servicetitle: UILabel!
+    
+    @IBOutlet weak var cost: UILabel!
+    
+    @IBOutlet weak var time: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

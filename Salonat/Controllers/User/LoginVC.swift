@@ -1,42 +1,42 @@
-//
-//  ViewController.swift
-//  Salonat
-//
-//  Created by salman on 10/19/18.
-//  Copyright © 2018 salman. All rights reserved.
-//
-
 import UIKit
 import Font_Awesome_Swift
-
 class LoginVC: UIViewController {
-
-    @IBOutlet weak var BUMenu: UIBarButtonItem!
     @IBOutlet weak var TFPassword: UITextField!
     @IBOutlet weak var TFEmail: UITextField!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(Helper.getdevicestoken())
-        
-       
         TFEmail.setLeftViewFAIcon(icon: .FAUserO, leftViewMode: .always, textColor: .lightGray, backgroundColor: .clear, size: nil)
         TFPassword.setLeftViewFAIcon(icon: .FALock, leftViewMode: .always, textColor: .lightGray, backgroundColor: .clear, size: nil)
+        if CheckInternet.Connection(){
 
-
-        
-        
-        BUMenu.setFAIcon(icon: .FANavicon, iconSize: 30)
-        // Do any additional setup after loading the view, typically from a nib.
+        }else{
+            self.showAlert(message: NSLocalizedString("no internet access", comment: ""))
+        }
     }
 
-    @IBAction func BUSkip(_ sender: UIButton) {
-    }
-    
-    
+
     @IBAction func BULogin(_ sender: UIButton) {
+        let user = TFEmail.text!
+        let pass = TFPassword.text!
+        Api.login(user_phone: user.replacedArabicDigitsWithEnglish , password:pass) { (error:Error?, success :Bool) in
+            if success {
+              print("success log in")
+            }else {
+                print("failed")
+            }
+        }
+        
+        
     }
     @IBAction func BUForget(_ sender: UIButton) {
+        
+    }
+    
+    
+    @IBAction func BUSkip(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "HomeStoryBoard") as! HomeVC
+        navigationController?.pushViewController(vc,animated: true)
     }
 }
 
