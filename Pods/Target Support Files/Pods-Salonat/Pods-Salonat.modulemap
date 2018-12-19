@@ -1,0 +1,6 @@
+framework module Pods_Salonat {
+  umbrella header "Pods-Salonat-umbrella.h"
+
+  export *
+  module * { export * }
+}
